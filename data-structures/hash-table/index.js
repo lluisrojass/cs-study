@@ -24,17 +24,18 @@ class HashTable {
   _hash(key) {
     if (!key) return new Error('A key is required');
 
-    var hash = 0, i = 0;
-
-    if (typeof key === 'string') key = key.toString();
-
-    for (; i < key.length; ++i) {
-      char = key.charCodeAt(i);
-      hash = (((hash << 5) - hash) + char) % this.capacity;
-      hash |= 0; // Convert to 32-bit integer
+    var hash = 0;
+    var ccode = 0;
+  
+    if (typeof key !== 'string'){
+      key = key.toString();
+      //console.log(`Key Value: ${typeof key} and was converted to String.`)
     }
-
-    return hash;
+    for (var i = 0; i < key.length; ++i) {
+      ccode = key.charCodeAt(i);
+      hash = (((hash << 5) - hash) + ccode); // bitwise operations convert to 32 bit signed int
+    }
+    return ( hash >>> 0 ) % this.capacity; // >>> 0 converts to unsigned 32 bit integer
   }
 
   insert(key, value) {
